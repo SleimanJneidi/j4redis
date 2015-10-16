@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -24,7 +25,7 @@ public class Connector {
         this.port = port;
     }
 
-    public <T> CompletableFuture<T> execute(byte[] cmdBytes, Function<ByteBuffer,? extends T> converter){
+    protected  <T> CompletableFuture<T> execute(byte[] cmdBytes, Function<ByteBuffer,? extends T> converter){
         AsynchronousSocketChannel asynchronousSocketChannel = null;
         CompletableFuture<ByteBuffer> future = new CompletableFuture<>();
         try {
@@ -49,5 +50,11 @@ public class Connector {
         }
         CompletableFuture<T> completableFuture = future.thenApply(converter);
         return completableFuture;
+    }
+
+    public CompletableFuture<Boolean> ping(){
+        CompletableFuture<Boolean> future = execute(Commands.PING.getBytesPrefix(), ByteBuffer::array)
+                .thenApply(b -> Arrays.equals(b,RESPUtils.PONG));
+        return future;
     }
 }

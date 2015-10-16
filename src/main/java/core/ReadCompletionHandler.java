@@ -27,7 +27,11 @@ import java.util.concurrent.CompletableFuture;
     public void completed(Integer result, ByteBuffer attachment) {
         buffer.flip();
         future.complete(buffer);
-
+        try {
+            this.socketChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
