@@ -53,8 +53,8 @@ public class Connector {
     }
 
     public CompletableFuture<Boolean> ping(){
-        CompletableFuture<Boolean> future = execute(Commands.PING.getBytesPrefix(), ByteBuffer::array)
-                .thenApply(b -> Arrays.equals(b,RESPUtils.PONG));
+        CompletableFuture<Boolean> future = execute(Commands.PING.getBytesPrefix(), ByteUtils::readToLimit)
+                                            .thenApply(b -> Arrays.equals(b, RESPUtils.PONG));
         return future;
     }
 }

@@ -55,12 +55,36 @@ class RESPUtils {
     // reads int from buffer, read till '\r' and leaves position at '\r'
     public static int readInt(ByteBuffer buffer){
         int value = 0;
+        boolean isNeg = false;
+        if(buffer.get()=='-'){
+            isNeg = true;
+        }else{
+            buffer.position(buffer.position()-1);
+        }
         byte currentByte;
         while ((currentByte = buffer.get()) != '\r') {
             value = value*10 + (currentByte - '0');
         }
         buffer.position(buffer.position() - 1);
-        return value;
+
+        return isNeg?-1*value: value;
+    }
+    // reads int from buffer, read till '\r' and leaves position at '\r'
+    public static long readLong(ByteBuffer buffer){
+        long value = 0L;
+        boolean isNeg = false;
+        if(buffer.get()=='-'){
+            isNeg = true;
+        }else{
+            buffer.position(buffer.position()-1);
+        }
+        byte currentByte;
+        while ((currentByte = buffer.get()) != '\r') {
+            value = value*10 + (currentByte - '0');
+        }
+        buffer.position(buffer.position() - 1);
+
+        return isNeg?-1*value: value;
     }
     // * is read
     public static List<String> readArray(ByteBuffer buffer, Charset charset){

@@ -68,6 +68,26 @@ public class RESPUtilsTest {
     }
 
     @Test
+    public void test_read_long(){
+        long longVal = 0xFFFFFFFFFFFFFFFL;
+        String longAsString = String.valueOf(longVal);
+        ByteBuffer buffer = ByteBuffer.wrap((":"+longAsString+"\r\n").getBytes());
+        buffer.get(); // reads ':'
+
+        long actualLong = readLong(buffer);
+
+        assertEquals(longVal,actualLong);
+    }
+
+    @Test
+    public void test_read_negative_int(){
+        ByteBuffer buffer = ByteBuffer.wrap(":-666\r\n".getBytes());
+        buffer.get(); // reads ':'
+        int val = readInt(buffer);
+        assertEquals(-666,val);
+    }
+
+    @Test
     public void test_add_CtrlF(){
         ByteBuffer buffer = ByteBuffer.allocate(2);
         addCtrlF(buffer);

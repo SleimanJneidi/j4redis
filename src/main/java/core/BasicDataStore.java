@@ -50,6 +50,19 @@ public class BasicDataStore implements DataStore {
         return future;
     }
 
+    @Override
+    public CompletableFuture<Long> increment(String key) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key);
+        byte[] incrCmd = concat(Commands.INCR.getBytesPrefix(), keyBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(incrCmd, Function.identity());
+        // remove ':'
+        CompletableFuture<Long> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readLong(buffer);
+        });
+        return finalFuture;
+    }
 
 
     private byte[] getBytes(String str){

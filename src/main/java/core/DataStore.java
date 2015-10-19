@@ -1,6 +1,5 @@
 package core;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -13,5 +12,7 @@ public interface DataStore {
     CompletableFuture<String> get(String key);
 
     CompletableFuture<Boolean> set(String key,String value);
+
+    CompletableFuture<Long> increment(String key);
 
 }
