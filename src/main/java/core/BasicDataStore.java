@@ -64,6 +64,20 @@ public class BasicDataStore implements DataStore {
         return finalFuture;
     }
 
+    @Override
+    public CompletableFuture<Long> decrement(String key) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key);
+        byte[] decrCmd = concat(Commands.DECR.getBytesPrefix(), keyBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(decrCmd, Function.identity());
+        // remove ':'
+        CompletableFuture<Long> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readLong(buffer);
+        });
+        return finalFuture;
+    }
+
 
     private byte[] getBytes(String str){
         return str.getBytes(StandardCharsets.UTF_8);

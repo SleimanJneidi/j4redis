@@ -15,4 +15,6 @@ public interface DataStore {
 
     CompletableFuture<Long> increment(String key);
 
+    CompletableFuture<Long> decrement(String key);
+
 }

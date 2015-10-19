@@ -31,10 +31,19 @@ public enum Commands implements Command {
     },
 
     INCR{
-        private final byte[]cmd = {'I','N','C','R',' '};
+        private final byte[]cmd = {'i','n','c','r',' '};
         @Override
         public byte[] getBytesPrefix() {
             return cmd;
         }
-    }
+    },
+
+    DECR{
+        private final byte[]cmd = {'d','e','c','r',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return cmd;
+        }
+    },
+
 }
