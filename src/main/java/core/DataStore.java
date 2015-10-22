@@ -1,6 +1,7 @@
 package core;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 /**
  * @author Sleiman
@@ -10,6 +11,8 @@ import java.util.concurrent.CompletableFuture;
 public interface DataStore {
 
     CompletableFuture<String> get(String key);
+
+    <T> CompletableFuture<T> get(String key,Function<String,? extends T> converter);
 
     CompletableFuture<Boolean> set(String key,String value);
 

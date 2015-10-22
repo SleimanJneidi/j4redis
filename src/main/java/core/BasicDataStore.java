@@ -36,6 +36,13 @@ public class BasicDataStore implements DataStore {
     }
 
     @Override
+    public <T> CompletableFuture<T> get(String key, Function<String,? extends T> converter) {
+        CompletableFuture<String> future = this.get(key);
+        CompletableFuture<T> convertedFuture = future.thenApply(s -> s == null ? null : converter.apply(s));
+        return convertedFuture;
+    }
+
+    @Override
     public CompletableFuture<Boolean> set(String key, String value) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);

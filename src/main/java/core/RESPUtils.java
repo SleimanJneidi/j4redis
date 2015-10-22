@@ -13,7 +13,7 @@ import java.util.List;
 class RESPUtils {
 
     static final byte[] OK = {'+', 'O','K','\r','\n'};
-    static final byte[] PONG = {'$','P', 'O','N','G','\r','\n'};
+    static final byte[] PONG = {'+','P', 'O','N','G','\r','\n'};
 
     public static void addCtrlF(ByteBuffer buffer){
         buffer.put((byte) '\r');
