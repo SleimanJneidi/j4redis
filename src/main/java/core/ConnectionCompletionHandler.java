@@ -23,7 +23,6 @@ class ConnectionCompletionHandler implements CompletionHandler<Void,ByteBuffer> 
 
     @Override
     public void completed(Void result, ByteBuffer buffer) {
-
         this.socketChannel.write(buffer,null,new WriteCompletionHandler(this.socketChannel, future));
     }
 

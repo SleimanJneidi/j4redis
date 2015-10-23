@@ -15,6 +15,7 @@ import static core.ByteUtils.*;
  *         Date: 16/10/15.
  */
 public class BasicDataStore implements DataStore {
+
     private final Connector connector;
 
     public BasicDataStore(Connector connector){
@@ -83,6 +84,22 @@ public class BasicDataStore implements DataStore {
             return RESPUtils.readLong(buffer);
         });
         return finalFuture;
+    }
+
+    @Override
+    public CompletableFuture<Boolean> exists(String key) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key);
+        byte[] existsCmd = concat(Commands.EXISTS.getBytesPrefix(),keyBytes);
+
+        CompletableFuture<ByteBuffer> future = this.connector.execute(existsCmd, Function.identity());
+        // remove ':'
+        CompletableFuture<Boolean> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readInt(buffer);
+        }).thenApply(i-> i==1);
+        return finalFuture;
+
     }
 
 

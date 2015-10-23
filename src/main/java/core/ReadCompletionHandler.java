@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
         try {
             this.socketChannel.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

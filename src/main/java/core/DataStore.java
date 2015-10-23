@@ -20,4 +20,6 @@ public interface DataStore {
 
     CompletableFuture<Long> decrement(String key);
 
+    CompletableFuture<Boolean> exists(String key);
+
 }

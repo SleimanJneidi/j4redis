@@ -6,6 +6,7 @@ package core;
  *         Date: 16/10/15.
  */
 public enum Commands implements Command {
+
     GET {
         private final byte[]cmd = {'g','e','t',' '};
         @Override
@@ -45,5 +46,11 @@ public enum Commands implements Command {
             return cmd;
         }
     },
-
+    EXISTS{
+        private final byte[]cmd = {'e','x','i','s','t','s',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return cmd;
+        }
+    }
 }

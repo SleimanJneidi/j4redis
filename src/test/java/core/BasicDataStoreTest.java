@@ -76,6 +76,20 @@ public class BasicDataStoreTest {
         assertEquals(-1L, actual);
     }
 
+    @Test
+    public void test_check_if_existing_key_exists()throws Exception{
+        ds.set("x","0").get();
+        boolean exists = ds.exists("x").get();
+        assertTrue(exists);
+    }
+
+    @Test
+    public void test_check_if_key_exists()throws Exception{
+        boolean exists = ds.exists("some_non_existing_key").get();
+        assertFalse(exists);
+    }
+
+
 
 
 }
