@@ -1,9 +1,6 @@
 package core;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import redis.embedded.RedisServer;
 
 import java.io.*;
@@ -23,23 +20,12 @@ import static org.junit.Assert.*;
  */
 public class ConnectorTest {
 
-    private static RedisServer redisServer;
-    private static final int PORT = 9999;
-
-    @BeforeClass
-    public static void setup() throws Exception {
-        redisServer = new RedisServer("2.8.9",PORT);
-        redisServer.start();
-    }
-
-    @AfterClass
-    public static void teardown() throws Exception {
-        redisServer.stop();
-    }
+    @ClassRule
+    public static RedisServerRule redisServerRule = new RedisServerRule();
 
     @Test
     public void test_connect() throws Exception {
-        Connector connector = new Connector("localhost", PORT);
+        Connector connector = new Connector("localhost",RedisServerRule.PORT);
         assertTrue(connector.ping().get());
     }
 

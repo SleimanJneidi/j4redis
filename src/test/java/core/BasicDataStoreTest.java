@@ -1,19 +1,11 @@
 package core;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
-import redis.embedded.RedisServer;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Sleiman
@@ -22,22 +14,12 @@ import static org.mockito.Mockito.*;
  */
 public class BasicDataStoreTest {
 
-    private static RedisServer redisServer;
-    private static final int PORT = 9999;
-    private final Connector connector = new Connector("localhost",PORT);
+    @ClassRule
+    public static RedisServerRule redisServerRule = new RedisServerRule();
+
+    private final Connector connector = new Connector("localhost",RedisServerRule.PORT);
     private final DataStore ds = DataStores.simpleDataStore(connector);
 
-    @BeforeClass
-    public static void setup() throws Exception {
-        redisServer = new RedisServer("2.8.9",PORT);
-        redisServer.start();
-
-    }
-
-    @AfterClass
-    public static void teardown() throws Exception {
-        redisServer.stop();
-    }
 
     @Test
     public void test_get_existing_key() throws ExecutionException, InterruptedException {
