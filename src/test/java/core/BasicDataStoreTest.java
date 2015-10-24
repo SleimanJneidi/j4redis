@@ -2,6 +2,9 @@ package core;
 
 import org.junit.ClassRule;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -100,11 +103,27 @@ public class BasicDataStoreTest {
 
     @Test
     public void test_incr_by() throws Exception{
-        DataStore ds = DataStores.simpleDataStore(connector);
         ds.set("x", "1").get();
-        long actual = ds.incrementBy("x",-15).get();
+        long actual = ds.incrementBy("x", -15).get();
         assertEquals(-14,actual);
     }
 
+    @Test
+    public void test_lpush() throws Exception{
+        ds.delete("listname").get();
+        int count = ds.listPush("listname", Arrays.asList("world", "hello")).get();
+        assertEquals(2,count);
+    }
+
+    @Test
+    public void test_lrange() throws Exception{
+        ds.delete("listname").get();
+        ds.listPush("listname", Arrays.asList("world", "hello")).get();
+        String[] actual =ds.listRange("listname", 0, -1).get()
+                .stream()
+                .toArray(s-> new String[2]);
+
+        assertArrayEquals(new String[]{"hello","world"},actual);
+    }
 
 }

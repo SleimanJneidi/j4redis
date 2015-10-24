@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -26,5 +28,8 @@ public interface DataStore {
 
     CompletableFuture<Integer> delete(String key,String... keys);
 
+    CompletableFuture<Integer> listPush(String key,Collection<String> values);
+
+    CompletableFuture<List<String>> listRange(String key,int from,int to);
 
 }

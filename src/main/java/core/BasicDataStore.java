@@ -2,10 +2,7 @@ package core;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -133,6 +130,40 @@ public class BasicDataStore implements DataStore {
         CompletableFuture<Integer> finalFuture = future.thenApply(buffer -> {
             buffer.get();
             return RESPUtils.readInt(buffer);
+        });
+        return finalFuture;
+    }
+
+    @Override
+    public CompletableFuture<Integer> listPush(String key, Collection<String> values) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(values);
+
+        byte[] valBytes = Stream.concat(Stream.of(key),values.stream())
+                .map(c -> c + " ")
+                .map(this::getBytes)
+                .reduce(ByteUtils::concat).get();
+
+        byte[] lpushCmd = concat(Commands.LPUSH.getBytesPrefix(), valBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(lpushCmd, Function.identity());
+        // reads ':'
+        CompletableFuture<Integer> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readInt(buffer);
+        });
+        return finalFuture;
+    }
+
+    @Override
+    public CompletableFuture<List<String>> listRange(String key, int from, int to) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key+" "+String.valueOf(from)+" "+String.valueOf(to));
+        byte[]lrangeCmd = concat(Commands.LRANGE.getBytesPrefix(), keyBytes);
+
+        CompletableFuture<ByteBuffer> future = this.connector.execute(lrangeCmd, Function.identity());
+        CompletableFuture<List<String>> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readArray(buffer, StandardCharsets.UTF_8);
         });
         return finalFuture;
     }

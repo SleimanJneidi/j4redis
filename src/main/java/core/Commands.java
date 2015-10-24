@@ -66,5 +66,19 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return cmd;
         }
+    },
+    LPUSH{
+        private final byte[]lpush = {'l','p','u','s','h',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return lpush;
+        }
+    },
+    LRANGE{
+        private final byte[]lrange = {'l','r','a','n','g','e',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return lrange;
+        }
     }
 }
