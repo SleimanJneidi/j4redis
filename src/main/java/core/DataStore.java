@@ -18,10 +18,13 @@ public interface DataStore {
 
     CompletableFuture<Long> increment(String key);
 
+    CompletableFuture<Long> incrementBy(String key,long value);
+
     CompletableFuture<Long> decrement(String key);
 
     CompletableFuture<Boolean> exists(String key);
 
     CompletableFuture<Integer> delete(String key,String... keys);
+
 
 }

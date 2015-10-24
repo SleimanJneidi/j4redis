@@ -59,5 +59,12 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return cmd;
         }
+    },
+    INCR_BY{
+        private final byte[]cmd = {'i','n','c','r','b','y',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return cmd;
+        }
     }
 }

@@ -95,7 +95,15 @@ public class BasicDataStoreTest {
         ds.set("key1","x").get();
         ds.set("key2","x").get();
         int count = ds.delete("key1", "key2").get();
-        assertEquals(2,count);
+        assertEquals(2, count);
+    }
+
+    @Test
+    public void test_incr_by() throws Exception{
+        DataStore ds = DataStores.simpleDataStore(connector);
+        ds.set("x", "1").get();
+        long actual = ds.incrementBy("x",-15).get();
+        assertEquals(-14,actual);
     }
 
 
