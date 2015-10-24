@@ -90,6 +90,13 @@ public class BasicDataStoreTest {
     }
 
 
+    @Test
+    public void test_delete() throws Exception{
+        ds.set("key1","x").get();
+        ds.set("key2","x").get();
+        int count = ds.delete("key1", "key2").get();
+        assertEquals(2,count);
+    }
 
 
 }

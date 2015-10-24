@@ -52,5 +52,12 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return cmd;
         }
+    },
+    DEL{
+        private final byte[]cmd = {'d','e','l',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return cmd;
+        }
     }
 }

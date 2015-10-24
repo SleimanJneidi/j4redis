@@ -5,8 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static core.ByteUtils.*;
 /**
@@ -100,6 +102,24 @@ public class BasicDataStore implements DataStore {
         }).thenApply(i-> i==1);
         return finalFuture;
 
+    }
+
+    @Override
+    public CompletableFuture<Integer> delete(String key,String... keys) {
+
+        byte[] keysBytes =  Stream.concat(Stream.of(key),Stream.of(keys))
+                            .map(c -> c + " ")
+                            .map(this::getBytes)
+                            .reduce(ByteUtils::concat).get();
+
+        byte[] deleteCmd = concat(Commands.DEL.getBytesPrefix(), keysBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(deleteCmd, Function.identity());
+        // reads ':'
+        CompletableFuture<Integer> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readInt(buffer);
+        });
+        return finalFuture;
     }
 
 

@@ -22,4 +22,6 @@ public interface DataStore {
 
     CompletableFuture<Boolean> exists(String key);
 
+    CompletableFuture<Integer> delete(String key,String... keys);
+
 }
