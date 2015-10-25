@@ -128,9 +128,17 @@ public class BasicDataStoreTest {
         ds.listPush("listname", Arrays.asList("world", "hello")).get();
         String[] actual =ds.listRange("listname", 0, -1).get()
                 .stream()
-                .toArray(s-> new String[2]);
+                .toArray(s -> new String[2]);
 
-        assertArrayEquals(new String[]{"hello","world"},actual);
+        assertArrayEquals(new String[]{"hello", "world"}, actual);
+    }
+
+    @Test
+    public void test_list_length() throws Exception{
+        ds.delete("listname").get();
+        ds.listPush("listname", Arrays.asList("world", "hello")).get();
+        int actual =  ds.listLength("listname").get();
+        assertEquals(2,actual);
     }
 
 }

@@ -34,4 +34,6 @@ public interface DataStore {
 
     CompletableFuture<List<String>> listRange(String key,int from,int to);
 
+    CompletableFuture<Integer> listLength(String key);
+
 }

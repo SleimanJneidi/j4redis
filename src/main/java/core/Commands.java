@@ -87,5 +87,12 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return lrange;
         }
+    },
+    L_LENGTH{
+        private final byte[]llength = {'l','l','e','n',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return llength;
+        }
     }
 }
