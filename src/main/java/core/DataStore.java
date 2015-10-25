@@ -36,4 +36,6 @@ public interface DataStore {
 
     CompletableFuture<Integer> listLength(String key);
 
+    CompletableFuture<String> listPop(String key);
+
 }

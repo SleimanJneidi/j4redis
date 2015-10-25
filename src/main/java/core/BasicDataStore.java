@@ -197,6 +197,20 @@ public class BasicDataStore implements DataStore {
         return finalFuture;
     }
 
+    @Override
+    public CompletableFuture<String> listPop(String key) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key);
+        byte[]lPopCmd = concat(Commands.L_POP.getBytesPrefix(), keyBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(lPopCmd, Function.identity());
+        // remove ':'
+        CompletableFuture<String> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readBulkString(buffer, StandardCharsets.UTF_8);
+        });
+        return finalFuture;
+    }
+
 
     private byte[] getBytes(String str){
         return str.getBytes(StandardCharsets.UTF_8);

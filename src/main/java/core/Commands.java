@@ -94,5 +94,13 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return llength;
         }
+    },
+
+    L_POP{
+        private final byte[]lpop = {'l','p','o','p',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return lpop;
+        }
     }
 }

@@ -138,7 +138,23 @@ public class BasicDataStoreTest {
         ds.delete("listname").get();
         ds.listPush("listname", Arrays.asList("world", "hello")).get();
         int actual =  ds.listLength("listname").get();
-        assertEquals(2,actual);
+        assertEquals(2, actual);
     }
+
+    @Test
+    public void test_list_pop() throws Exception{
+        ds.delete("listname").get();
+        ds.listPush("listname", Arrays.asList("world", "hello")).get();
+        String actual =  ds.listPop("listname").get();
+        assertEquals("hello",actual);
+    }
+
+    @Test
+    public void test_list_pop_null_list() throws Exception{
+        ds.delete("listname").get();
+        String actual =  ds.listPop("listname").get();
+        assertNull(actual);
+    }
+
 
 }
