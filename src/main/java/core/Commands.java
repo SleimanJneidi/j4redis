@@ -67,6 +67,13 @@ public enum Commands implements Command {
             return cmd;
         }
     },
+    DECR_BY{
+        private final byte[]cmd = {'d','e','c','r','b','y',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return cmd;
+        }
+    },
     LPUSH{
         private final byte[]lpush = {'l','p','u','s','h',' '};
         @Override

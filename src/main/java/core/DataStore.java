@@ -24,6 +24,8 @@ public interface DataStore {
 
     CompletableFuture<Long> decrement(String key);
 
+    CompletableFuture<Long> decrementBy(String key,long value);
+
     CompletableFuture<Boolean> exists(String key);
 
     CompletableFuture<Integer> delete(String key,String... keys);

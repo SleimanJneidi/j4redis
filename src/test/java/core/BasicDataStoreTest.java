@@ -109,6 +109,13 @@ public class BasicDataStoreTest {
     }
 
     @Test
+    public void test_decr_by() throws Exception{
+        ds.set("x", "4").get();
+        long actual = ds.decrementBy("x", 1).get();
+        assertEquals(3,actual);
+    }
+
+    @Test
     public void test_lpush() throws Exception{
         ds.delete("listname").get();
         int count = ds.listPush("listname", Arrays.asList("world", "hello")).get();

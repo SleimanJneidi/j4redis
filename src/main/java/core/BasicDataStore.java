@@ -101,6 +101,21 @@ public class BasicDataStore implements DataStore {
     }
 
     @Override
+    public CompletableFuture<Long> decrementBy(String key, long value) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key+" ");
+        byte[]valBytes = getBytes(String.valueOf(value));
+        byte[]decrCmd = concat(Commands.DECR_BY.getBytesPrefix(), concat(keyBytes, valBytes));
+        CompletableFuture<ByteBuffer> future = this.connector.execute(decrCmd, Function.identity());
+        // remove ':'
+        CompletableFuture<Long> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readLong(buffer);
+        });
+        return finalFuture;
+    }
+
+    @Override
     public CompletableFuture<Boolean> exists(String key) {
         Objects.requireNonNull(key);
         byte[] keyBytes = getBytes(key);
