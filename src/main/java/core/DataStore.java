@@ -38,4 +38,6 @@ public interface DataStore {
 
     CompletableFuture<String> listPop(String key);
 
+    CompletableFuture<Integer> rpush(String key,Collection<String> values);
+
 }

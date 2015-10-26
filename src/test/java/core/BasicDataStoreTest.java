@@ -156,5 +156,17 @@ public class BasicDataStoreTest {
         assertNull(actual);
     }
 
+    @Test
+    public void test_rpush_test() throws Exception{
+        ds.delete("listname").get();
+        ds.rpush("listname", Arrays.asList("hello", "world")).get();
+
+        String[] actual =ds.listRange("listname", 0, -1).get()
+                .stream()
+                .toArray(s -> new String[2]);
+
+        assertArrayEquals(new String[]{"hello", "world"}, actual);
+    }
+
 
 }

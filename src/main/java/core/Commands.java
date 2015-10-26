@@ -102,5 +102,12 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return lpop;
         }
+    },
+    RPUSH{
+        private final byte[]rpush = {'r','p','u','s','h',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return rpush;
+        }
     }
 }

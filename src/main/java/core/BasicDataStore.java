@@ -211,6 +211,26 @@ public class BasicDataStore implements DataStore {
         return finalFuture;
     }
 
+    @Override
+    public CompletableFuture<Integer> rpush(String key, Collection<String> values) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(values);
+
+        byte[] valBytes = Stream.concat(Stream.of(key),values.stream())
+                .map(c -> c + " ")
+                .map(this::getBytes)
+                .reduce(ByteUtils::concat).get();
+
+        byte[] rpushCmd = concat(Commands.RPUSH.getBytesPrefix(), valBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(rpushCmd, Function.identity());
+        // reads ':'
+        CompletableFuture<Integer> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readInt(buffer);
+        });
+        return finalFuture;
+    }
+
 
     private byte[] getBytes(String str){
         return str.getBytes(StandardCharsets.UTF_8);
