@@ -103,6 +103,15 @@ public enum Commands implements Command {
             return lpop;
         }
     },
+
+    L_INDEX{
+        private final byte[]lindex = {'l','i','n','d','e','x',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return lindex;
+        }
+    },
+
     RPUSH{
         private final byte[]rpush = {'r','p','u','s','h',' '};
         @Override

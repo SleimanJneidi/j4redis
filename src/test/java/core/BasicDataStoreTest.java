@@ -168,5 +168,21 @@ public class BasicDataStoreTest {
         assertArrayEquals(new String[]{"hello", "world"}, actual);
     }
 
+    @Test
+    public void test_lindex_test() throws Exception{
+        ds.delete("listname").get();
+        ds.rpush("listname", Arrays.asList("hello", "world")).get();
+        String actual = ds.listIndex("listname",0).get();
+        assertEquals("hello", actual);
+
+        actual = ds.listIndex("listname",1).get();
+        assertEquals("world",actual);
+
+        actual = ds.listIndex("listname",5).get();
+        assertNull(actual);
+
+
+    }
+
 
 }

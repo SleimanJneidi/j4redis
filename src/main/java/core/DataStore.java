@@ -40,4 +40,6 @@ public interface DataStore {
 
     CompletableFuture<Integer> rpush(String key,Collection<String> values);
 
+    CompletableFuture<String> listIndex(String key,int index);
+
 }

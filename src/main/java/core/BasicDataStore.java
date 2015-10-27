@@ -231,6 +231,21 @@ public class BasicDataStore implements DataStore {
         return finalFuture;
     }
 
+    @Override
+    public CompletableFuture<String> listIndex(String key, int index) {
+        Objects.requireNonNull(key);
+        byte[] keyBytes = getBytes(key+" "+String.valueOf(index));
+        byte[]lindexCmd = concat(Commands.L_INDEX.getBytesPrefix(), keyBytes);
+
+        CompletableFuture<ByteBuffer> future = this.connector.execute(lindexCmd, Function.identity());
+        // remove ':'
+        CompletableFuture<String> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readBulkString(buffer, StandardCharsets.UTF_8);
+        });
+        return finalFuture;
+    }
+
 
     private byte[] getBytes(String str){
         return str.getBytes(StandardCharsets.UTF_8);
