@@ -232,6 +232,23 @@ public class BasicDataStore implements DataStore {
     }
 
     @Override
+    public CompletableFuture<Integer> rpushx(String key, String value) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(value);
+
+        byte[] keyValBytes = getBytes(key+" "+value);
+
+        byte[] rpushxCmd = concat(Commands.R_PUSH_X.getBytesPrefix(), keyValBytes);
+        CompletableFuture<ByteBuffer> future = this.connector.execute(rpushxCmd, Function.identity());
+        // reads ':'
+        CompletableFuture<Integer> finalFuture = future.thenApply(buffer -> {
+            buffer.get();
+            return RESPUtils.readInt(buffer);
+        });
+        return finalFuture;
+    }
+
+    @Override
     public CompletableFuture<String> listIndex(String key, int index) {
         Objects.requireNonNull(key);
         byte[] keyBytes = getBytes(key+" "+String.valueOf(index));

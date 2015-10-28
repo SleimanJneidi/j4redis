@@ -118,5 +118,13 @@ public enum Commands implements Command {
         public byte[] getBytesPrefix() {
             return rpush;
         }
+    },
+
+    R_PUSH_X{
+        private final byte[]rpushx = {'r','p','u','s','h','x',' '};
+        @Override
+        public byte[] getBytesPrefix() {
+            return rpushx;
+        }
     }
 }

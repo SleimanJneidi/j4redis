@@ -169,6 +169,20 @@ public class BasicDataStoreTest {
     }
 
     @Test
+    public void test_rpush_x_test() throws Exception{
+        ds.delete("listname").get();
+        ds.rpush("listname", Arrays.asList("hello", "world")).get();
+        int length = ds.rpushx("listname", "there").get();
+
+        assertEquals(3,length);
+        String[] actual =ds.listRange("listname", 0, -1).get()
+                .stream()
+                .toArray(s -> new String[3]);
+
+        assertArrayEquals(new String[]{"hello", "world","there"}, actual);
+    }
+
+    @Test
     public void test_lindex_test() throws Exception{
         ds.delete("listname").get();
         ds.rpush("listname", Arrays.asList("hello", "world")).get();
